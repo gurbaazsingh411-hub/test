@@ -1,0 +1,27 @@
+﻿name: Daily Streak Keeper
+
+on:
+  schedule:
+    - cron: '30 18 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Configure Git
+        run: |
+          git config user.name "gurbaazsingh411-hub"
+          git config user.email "162468305+gurbaazsingh411-hub@users.noreply.github.com"
+      - name: Make daily commit
+        run: |
+          DATE=$(TZ='Asia/Kolkata' date '+%Y-%m-%d %H:%M:%S %Z')
+          echo "Last auto-commit: $DATE" >> streak-log.md
+          git add streak-log.md
+          git commit -m "ðŸ”¥ streak keeper: $DATE"
+          git push
